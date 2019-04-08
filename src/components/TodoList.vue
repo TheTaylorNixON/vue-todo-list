@@ -1,0 +1,32 @@
+<template>
+    <ul>
+        <TodoListItem v-for="(todo, index) in todos" 
+            :key="index" :todo="todo" 
+            v-on:removeItem="removeItem($event)"
+            v-on:doneItem="doneItem($event)"
+            />
+        <!-- <TodoListItem v-for="(todo, index) in todos" :key="index" :todo="todo" v-on:removeItem="up($event)"/> -->
+    </ul>
+</template>
+
+<script>
+import TodoListItem from './TodoListItem'
+
+export default {
+    name: 'TodoList',
+    components: {
+        TodoListItem
+    },
+    props: {
+        todos: Array
+    },
+    methods: {
+        removeItem: function (id) {
+            this.$emit('removeItem', id)
+        },
+        doneItem: function(id) {
+            this.$emit('doneItem', id);
+        }
+    }
+}
+</script>
