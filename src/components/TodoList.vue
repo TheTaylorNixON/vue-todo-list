@@ -1,5 +1,5 @@
 <template>
-    <ul>
+    <ul class="list-group todo-list">
         <TodoListItem v-for="(todo, index) in todos" 
             :key="index" :todo="todo" 
             v-on:removeItem="removeItem($event)"
@@ -30,3 +30,9 @@ export default {
     }
 }
 </script>
+
+<style>
+    .todo-list .list-group-item {
+        padding: .25rem .75rem;
+    }
+</style>

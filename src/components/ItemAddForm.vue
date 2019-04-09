@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <input v-model="label" />
-        <button v-on:click="onLableSubmit">Add</button>
+    <form class="item-add-form d-flex">
+        <input class="form-control" placeholder="What needs to be done" v-model="label" />
+        <button class="btn btn-outline-secondary" v-on:click.prevent="onLableSubmit">Add_Element</button>
         <!--Можно и так можно и в методе --> <!-- <button v-on:click="$emit('labelText', label)">Add</button> -->
-    </div>
+    </form>
 </template>
 
 <script>
@@ -22,3 +22,13 @@ export default {
     }
 }
 </script>
+
+<style>
+    .item-add-form {
+        margin-top: 10px;
+    }
+
+    .item-add-form input {
+        margin-right: 3px;
+    }
+</style>
