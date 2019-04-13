@@ -2,8 +2,15 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <AppHeader :total="todoData.length" v-bind:todo="todoData.length-countDone()" v-bind:done="countDone()" />
-    <TodoList :todos=todoData v-on:removeItem="removeItem" v-on:doneItem="toggleDoneItem" />
-    <ItemAddForm v-on:labelText="addItem($event)" />
+    <div class="top-panel d-flex">
+      <SearchPanel @searchChange="searchChange($event)" />
+    </div>
+    <TodoList :todos="visibleItems(todoData, term)"
+      @removeItem="removeItem"
+      @doneItem="toggleDoneItem" 
+      @importantItem="toggleImportantItem"
+    />
+    <ItemAddForm @labelText="addItem($event)" />
   </div>
 </template>
 
@@ -11,6 +18,7 @@
 import AppHeader from './components/AppHeader.vue'
 import TodoList from './components/TodoList.vue'
 import ItemAddForm from './components/ItemAddForm.vue'
+import SearchPanel from './components/SearchPanel.vue'
 
 var idx = 0;
 
@@ -19,7 +27,8 @@ export default {
   components: {
     AppHeader,
     TodoList,
-    ItemAddForm
+    ItemAddForm,
+    SearchPanel
   },
   data() {
     return {
@@ -27,7 +36,8 @@ export default {
         this.createTodoItem('Drink Coffe'),
         this.createTodoItem('Code'),
         this.createTodoItem('Make App')
-      ]
+      ],
+      term: ''
     }
   },
   methods: {
@@ -35,6 +45,7 @@ export default {
       return {
         label: label,
         done: false,
+        important: false,
         id: idx++
       }
     },
@@ -50,16 +61,28 @@ export default {
       const el = this.todoData[idx];
       el.done = !el.done;
     },
+    toggleImportantItem: function(id) {
+      const idx = this.todoData.findIndex((el) => el.id === id);
+      const el = this.todoData[idx];
+      el.important = !el.important;
+    },
     countDone: function() {
-      var done = this.todoData.filter((el) => el.done);
-      return done.length;
+      return this.todoData.filter((el) => el.done).length
+    },
+    searchChange: function(term) {
+      this.term = term;
+    },
+    visibleItems: function (items, term) {
+      if (!term.length) {
+        return items;
+      }
+      return items.filter((el) => el.label.toLowerCase().indexOf(term.toLowerCase()) !== -1);
     }
   }
 }
 </script>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
@@ -85,4 +108,9 @@ li {
   padding: 0;
   text-align: left;
 }
+
+.top-panel {
+  margin: 16px 0;
+}
+
 </style>

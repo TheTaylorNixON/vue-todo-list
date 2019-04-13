@@ -3,6 +3,7 @@
         <TodoListItem v-for="(todo, index) in todos" 
             :key="index" :todo="todo" 
             v-on:removeItem="removeItem($event)"
+            v-on:importantItem="importantItem($event)"
             v-on:doneItem="doneItem($event)"
             />
         <!-- <TodoListItem v-for="(todo, index) in todos" :key="index" :todo="todo" v-on:removeItem="up($event)"/> -->
@@ -26,6 +27,9 @@ export default {
         },
         doneItem: function(id) {
             this.$emit('doneItem', id);
+        },
+        importantItem: function(id) {
+            this.$emit('importantItem', id);
         }
     }
 }

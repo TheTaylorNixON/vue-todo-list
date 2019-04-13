@@ -1,7 +1,7 @@
 <template>
     <form class="item-add-form d-flex">
         <input class="form-control" placeholder="What needs to be done" v-model="label" />
-        <button class="btn btn-outline-secondary" v-on:click.prevent="onLableSubmit">Add_Element</button>
+        <button class="btn btn-outline-secondary" v-on:click.prevent="onLableSubmit">Add Element</button>
         <!--Можно и так можно и в методе --> <!-- <button v-on:click="$emit('labelText', label)">Add</button> -->
     </form>
 </template>
