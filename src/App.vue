@@ -4,8 +4,9 @@
     <AppHeader :total="todoData.length" v-bind:todo="todoData.length-countDone()" v-bind:done="countDone()" />
     <div class="top-panel d-flex">
       <SearchPanel @searchChange="searchChange($event)" />
+      <ItemStatusFilter @statusFilter="filter=$event" :filter="filter" />
     </div>
-    <TodoList :todos="visibleItems(todoData, term)"
+    <TodoList :todos="visibleItems(todoData, term, filter)"
       @removeItem="removeItem"
       @doneItem="toggleDoneItem" 
       @importantItem="toggleImportantItem"
@@ -19,6 +20,7 @@ import AppHeader from './components/AppHeader.vue'
 import TodoList from './components/TodoList.vue'
 import ItemAddForm from './components/ItemAddForm.vue'
 import SearchPanel from './components/SearchPanel.vue'
+import ItemStatusFilter from './components/ItemStatusFilter.vue'
 
 var idx = 0;
 
@@ -28,7 +30,8 @@ export default {
     AppHeader,
     TodoList,
     ItemAddForm,
-    SearchPanel
+    SearchPanel,
+    ItemStatusFilter
   },
   data() {
     return {
@@ -37,7 +40,8 @@ export default {
         this.createTodoItem('Code'),
         this.createTodoItem('Make App')
       ],
-      term: ''
+      term: '',
+      filter: 'All'
     }
   },
   methods: {
@@ -67,16 +71,32 @@ export default {
       el.important = !el.important;
     },
     countDone: function() {
-      return this.todoData.filter((el) => el.done).length
+      return this.todoData.filter((el) => el.done).length;
     },
     searchChange: function(term) {
       this.term = term;
     },
-    visibleItems: function (items, term) {
+    searchItems: function (items, term) {
       if (!term.length) {
         return items;
       }
       return items.filter((el) => el.label.toLowerCase().indexOf(term.toLowerCase()) !== -1);
+    },
+    statusFilter: function(items, filter) {
+      switch (filter) {
+        case 'All':
+          return items;
+        case 'Active':
+          return items.filter((el) => !el.done);
+        case 'Done':
+          return items.filter((el) => el.done);
+        default:
+          return items;
+      }
+    },
+    visibleItems: function(items, term, filter) {
+      const searched = this.searchItems(items, term);
+      return this.statusFilter(searched, filter);
     }
   }
 }
