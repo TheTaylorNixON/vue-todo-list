@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <AppHeader :total="todoData.length" v-bind:todo="todoData.length-countDone()" v-bind:done="countDone()" />
+    <AppHeader :total="todoData.length" v-bind:todo="todoData.length-countDone" v-bind:done="countDone" />
     <div class="top-panel d-flex">
       <SearchPanel @searchChange="searchChange($event)" />
       <ItemStatusFilter @statusFilter="filter=$event" :filter="filter" />
@@ -44,6 +44,11 @@ export default {
       filter: 'All'
     }
   },
+  computed: {
+    countDone: function() {
+      return this.todoData.filter((el) => el.done).length;
+    }
+  },
   methods: {
     createTodoItem: function(label) {
       return {
@@ -69,9 +74,6 @@ export default {
       const idx = this.todoData.findIndex((el) => el.id === id);
       const el = this.todoData[idx];
       el.important = !el.important;
-    },
-    countDone: function() {
-      return this.todoData.filter((el) => el.done).length;
     },
     searchChange: function(term) {
       this.term = term;
